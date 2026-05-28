@@ -1,122 +1,162 @@
-import { motion } from 'framer-motion';
-import { ArrowDown, Github, Linkedin, Youtube, Instagram } from 'lucide-react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { ArrowDown, Github, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 import ThreeScene from './ThreeScene';
 
 export default function HeroSection() {
+  const [isHover, setIsHover] = useState(false);
+
+  // 🧠 3D tilt
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useTransform(y, [-100, 100], [10, -10]);
+  const rotateY = useTransform(x, [-100, 100], [-10, 10]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    x.set(e.clientX - rect.left - rect.width / 2);
+    y.set(e.clientY - rect.top - rect.height / 2);
+  };
+
+  const reset = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   const scrollToAbout = () => {
-    const element = document.querySelector('#about');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    const el = document.querySelector('#about');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+      {/* 🌈 BACKGROUND */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-white via-pink-50 to-white dark:from-black dark:via-zinc-900 dark:to-black" />
+
+        <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-fuchsia-400/20 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-120px] right-[-100px] w-[350px] h-[350px] bg-fuchsia-500/20 blur-[120px] rounded-full animate-pulse" />
+      </div>
+
       <ThreeScene />
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
+
+      <div className="container mx-auto px-6 relative z-10 flex justify-center">
+        <div className="flex flex-col md:flex-row items-center gap-10 max-w-5xl">
+
+          {/* 🧑 FOTO */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            style={{ rotateX, rotateY }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={reset}
+            onHoverStart={() => setIsHover(true)}
+            onHoverEnd={() => setIsHover(false)}
+            className="relative"
           >
-            <motion.span 
-              className="inline-block px-4 py-2 rounded-full glass text-sm font-medium text-primary mb-6"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
+            <div className="absolute inset-0 blur-3xl bg-fuchsia-500/30 opacity-40 rounded-2xl" />
+
+            <div className="relative w-[260px] md:w-[320px] lg:w-[360px] aspect-[3/4]">
+              <img
+                src="/fotodina1.jpg"
+                alt="Profile"
+                className="w-full h-full object-cover rounded-[2rem] border border-fuchsia-300/20 shadow-2xl"
+              />
+            </div>
+          </motion.div>
+
+          {/* ✨ TEXT */}
+          <div className="text-center md:text-left max-w-lg">
+
+            {/* BADGE */}
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="
+                inline-block px-4 py-2 rounded-full mb-5
+                bg-fuchsia-500/10 text-fuchsia-500 dark:text-fuchsia-300
+                border border-fuchsia-300/20
+              "
             >
-              👋 Selamat datang di portfolio saya
+              👋 Welcome 🌸
             </motion.span>
-          </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
-          >
-            Fullstack Developer
-            <br />
-            <span className="text-gradient">&amp; Content Creator</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
-          >
-            Saya membangun aplikasi web yang indah dan fungsional, 
-            serta membagikan pengetahuan melalui konten yang inspiratif.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
-          >
-            <Button 
-              size="lg" 
-              className="rounded-full px-8 shadow-glow"
-              onClick={() => {
-                const element = document.querySelector('#projects');
-                if (element) element.scrollIntoView({ behavior: 'smooth' });
-              }}
+            {/* TITLE */}
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold leading-tight mb-5 text-black dark:text-white"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
             >
-              Lihat Projects
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="rounded-full px-8"
-              onClick={() => {
-                const element = document.querySelector('#contact');
-                if (element) element.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Hubungi Saya
-            </Button>
-          </motion.div>
+              Hello, I’m{' '}
+              <span className="bg-gradient-to-r from-fuchsia-400 via-pink-300 to-rose-400 bg-clip-text text-transparent">
+                Dina Nafisah ✨
+              </span>
+            </motion.h1>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex items-center justify-center gap-6"
-          >
-            {[
-              { icon: Github, href: '#', label: 'GitHub' },
-              { icon: Linkedin, href: '#', label: 'LinkedIn' },
-              { icon: Youtube, href: '#', label: 'YouTube' },
-              { icon: Instagram, href: '#', label: 'Instagram' },
-            ].map((social) => (
-              <motion.a
-                key={social.label}
-                href={social.href}
-                className="p-3 rounded-full glass hover:shadow-glow transition-all duration-300"
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label={social.label}
+            {/* DESC */}
+            <motion.p
+              className="text-lg mb-6 text-black/70 dark:text-white/70"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              Aku masih pelajar yang lagi belajar ngoding 💻✨  
+              khususnya <span className="text-fuchsia-500">web development</span> 🚀
+            </motion.p>
+
+            {/* BUTTON */}
+            <div className="flex gap-4 flex-wrap justify-center md:justify-start">
+
+              <Button className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white px-8 rounded-full">
+                Projects 🚀
+              </Button>
+
+              <Button
+                variant="outline"
+                className="border-fuchsia-400 text-fuchsia-500 dark:text-fuchsia-300 rounded-full px-8"
               >
-                <social.icon className="h-5 w-5 text-foreground" />
-              </motion.a>
-            ))}
-          </motion.div>
+                Contact 💌
+              </Button>
+
+            </div>
+
+            {/* SOCIAL */}
+            <div className="flex gap-4 mt-6 justify-center md:justify-start">
+              {[
+                { icon: Github, href: 'https://github.com/farahfajarna/coding-farah.git' },
+                { icon: Youtube, href: 'https://www.youtube.com/' },
+              ].map((social, i) => (
+                <motion.a
+                  key={i}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                    p-3 rounded-full
+                    bg-white/5 backdrop-blur-md
+                    border border-white/10
+                    hover:border-fuchsia-400
+                    hover:shadow-[0_0_20px_rgba(217,70,239,0.4)]
+                    transition
+                  "
+                  whileHover={{ scale: 1.15, y: -3 }}
+                >
+                  <social.icon className="h-5 w-5 text-black dark:text-white" />
+                </motion.a>
+              ))}
+            </div>
+
+          </div>
         </div>
       </div>
 
-      <motion.button
+      {/* ⬇️ SCROLL */}
+      <button
         onClick={scrollToAbout}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 p-3 rounded-full glass animate-float cursor-pointer"
-        whileHover={{ scale: 1.1 }}
-        aria-label="Scroll to About"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
-        <ArrowDown className="h-5 w-5 text-primary" />
-      </motion.button>
+        <ArrowDown className="text-fuchsia-500" />
+      </button>
     </section>
   );
 }

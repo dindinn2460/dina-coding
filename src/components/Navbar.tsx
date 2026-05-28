@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Moon, Sun, Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import { Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavbarProps {
@@ -9,149 +8,203 @@ interface NavbarProps {
 }
 
 export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [active, setActive] = useState('#home');
+  const [position, setPosition] = useState({ left: 0, width: 0 });
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const targetRef = useRef<string | null>(null);
 
   const navItems = [
     { label: 'Home', href: '#home' },
-    { label: 'About', href: '#about' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Projects', href: '#projects' },
+    { label: 'Know Me', href: '#about' },
+    { label: 'Subjects', href: '#skills' },
+    { label: 'Favorites', href: '#projects' },
     { label: 'Contact', href: '#contact' },
   ];
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMobileMenuOpen(false);
+  const updatePosition = (index: number) => {
+    const el = itemRefs.current[index];
+    if (!el) return;
+
+    setPosition({
+      left: el.offsetLeft,
+      width: el.offsetWidth,
+    });
+  };
+
+  useLayoutEffect(() => {
+    const index = navItems.findIndex((i) => i.href === active);
+    if (index !== -1) updatePosition(index);
+  }, [active]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const index = navItems.findIndex((i) => i.href === active);
+      if (index !== -1) updatePosition(index);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [active]);
+
+  // Intersection Observer
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+
+    navItems.forEach((item, index) => {
+      const section = document.querySelector(item.href);
+      if (!section) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+
+          if (!entry.isIntersecting) return;
+
+          if (targetRef.current && targetRef.current !== item.href) return;
+
+          setActive(item.href);
+          updatePosition(index);
+
+          if (targetRef.current === item.href) {
+            targetRef.current = null;
+          }
+        },
+        {
+          threshold: 0.6,
+          rootMargin: '0px 0px -10% 0px',
+        }
+      );
+
+      observer.observe(section);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  const scrollToSection = (href: string, index: number) => {
+    const el = document.querySelector(href);
+    if (!el) return;
+
+    targetRef.current = href;
+    setActive(href);
+    updatePosition(index);
+
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'glass-strong shadow-card' : 'bg-transparent'
-      }`}
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <motion.a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('#home');
-            }}
-            className="font-display text-xl md:text-2xl font-bold text-gradient cursor-pointer"
-            whileHover={{ scale: 1.05 }}
-          >
-            &lt;Dev /&gt;
-          </motion.a>
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <motion.a
-                key={item.label}
-                href={item.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item.href);
-                }}
-                className="text-muted-foreground hover:text-foreground transition-colors font-medium cursor-pointer"
-                whileHover={{ y: -2 }}
-              >
-                {item.label}
-              </motion.a>
-            ))}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="rounded-full"
-            >
-              <AnimatePresence mode="wait">
-                {isDark ? (
-                  <motion.div
-                    key="sun"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                  >
-                    <Sun className="h-5 w-5" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="moon"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                  >
-                    <Moon className="h-5 w-5" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </Button>
-          </div>
+      {/* SOFT NEON GLOW */}
+      <div className="absolute inset-0 blur-3xl opacity-30 bg-gradient-to-r from-fuchsia-400/30 via-pink-300/20 to-rose-400/30 rounded-full pointer-events-none" />
 
-          {/* Mobile Menu Button */}
-          <div className="flex items-center gap-2 md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="rounded-full"
-            >
-              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-          </div>
-        </div>
-      </div>
+      <div
+        className={`
+          relative flex items-center gap-2 px-3 py-2
+          rounded-full backdrop-blur-xl border
+          transition-all duration-500 ease-out shadow-xl
+          ${
+            isDark
+              ? 'bg-fuchsia-500/10 border-fuchsia-300/20'
+              : 'bg-white/80 border-rose-300/40'
+          }
+        `}
+      >
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
+        {/* NAV */}
+        <div className="relative flex items-center">
+
+          {/* ACTIVE CAPSULE */}
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-strong border-t border-border"
+            className="absolute top-0 bottom-0 rounded-full"
+            animate={{
+              left: position.left,
+              width: position.width,
+              opacity: 1,
+              scale: 1,
+            }}
+            transition={{
+              type: 'spring',
+              stiffness: 180,
+              damping: 25,
+              mass: 0.8,
+            }}
           >
-            <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(item.href);
-                  }}
-                  className="text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
+            <div
+              className={`
+                w-full h-full rounded-full
+                ${isDark ? 'bg-fuchsia-400/20' : 'bg-rose-300/40'}
+                shadow-[0_0_12px_rgba(217,70,239,0.35),0_0_25px_rgba(217,70,239,0.25),0_0_45px_rgba(217,70,239,0.2),inset_0_0_8px_rgba(255,255,255,0.25)]
+                transition-all duration-500
+              `}
+            />
           </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+
+          {navItems.map((item, index) => (
+            <button
+              key={item.href}
+              ref={(el) => (itemRefs.current[index] = el)}
+              onClick={() => scrollToSection(item.href, index)}
+              className={`
+                relative px-3 py-1.5 text-sm font-medium
+                transition-all duration-500 ease-out
+                ${
+                  active === item.href
+                    ? 'text-fuchsia-400 dark:text-fuchsia-300 font-semibold scale-105'
+                    : isDark
+                      ? 'text-white/70 hover:text-white hover:scale-105'
+                      : 'text-black/70 hover:text-black hover:scale-105'
+                }
+              `}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {/* divider */}
+        <div
+          className={`w-px h-4 mx-1 transition-all duration-500 ${
+            isDark ? 'bg-fuchsia-300/20' : 'bg-rose-300/40'
+          }`}
+        />
+
+        {/* theme toggle */}
+        <button
+          onClick={toggleTheme}
+          className={`
+            p-1.5 rounded-full transition-all duration-500
+            ${isDark ? 'hover:bg-fuchsia-300/10' : 'hover:bg-rose-200/40'}
+          `}
+        >
+          <AnimatePresence mode="wait">
+            {isDark ? (
+              <motion.div
+                key="sun"
+                initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
+                animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.4 }}
+              >
+                <Sun className="w-4 h-4 text-fuchsia-200" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="moon"
+                initial={{ rotate: 90, opacity: 0, scale: 0.8 }}
+                animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                exit={{ rotate: -90, opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.4 }}
+              >
+                <Moon className="w-4 h-4 text-fuchsia-400" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </button>
+
+      </div>
+    </div>
   );
 }
