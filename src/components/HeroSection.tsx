@@ -7,7 +7,6 @@ import ThreeScene from './ThreeScene';
 export default function HeroSection() {
   const [isHover, setIsHover] = useState(false);
 
-  // 🧠 3D tilt
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -31,14 +30,29 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden scroll-mt-24"
+    >
 
-      {/* 🌈 BACKGROUND */}
+      {/* 🌸 BACKGROUND (SAMA DENGAN ABOUT) */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-white via-pink-50 to-white dark:from-black dark:via-zinc-900 dark:to-black" />
+        <div
+          className="
+            absolute inset-0
+            bg-gradient-to-b
+            from-fuchsia-50
+            via-pink-50
+            to-rose-50
+            dark:from-zinc-950
+            dark:via-zinc-900
+            dark:to-zinc-950
+          "
+        />
 
+        {/* glow fuchsia + pink biar match */}
         <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-fuchsia-400/20 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-[-120px] right-[-100px] w-[350px] h-[350px] bg-fuchsia-500/20 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-120px] right-[-100px] w-[350px] h-[350px] bg-pink-400/20 blur-[120px] rounded-full animate-pulse" />
       </div>
 
       <ThreeScene />
@@ -69,7 +83,6 @@ export default function HeroSection() {
           {/* ✨ TEXT */}
           <div className="text-center md:text-left max-w-lg">
 
-            {/* BADGE */}
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -82,7 +95,6 @@ export default function HeroSection() {
               👋 Welcome 🌸
             </motion.span>
 
-            {/* TITLE */}
             <motion.h1
               className="text-4xl md:text-6xl font-bold leading-tight mb-5 text-black dark:text-white"
               initial={{ opacity: 0, y: 20 }}
@@ -94,7 +106,6 @@ export default function HeroSection() {
               </span>
             </motion.h1>
 
-            {/* DESC */}
             <motion.p
               className="text-lg mb-6 text-black/70 dark:text-white/70"
               initial={{ opacity: 0, y: 20 }}
@@ -123,7 +134,7 @@ export default function HeroSection() {
             {/* SOCIAL */}
             <div className="flex gap-4 mt-6 justify-center md:justify-start">
               {[
-                { icon: Github, href: 'https://github.com/farahfajarna/coding-farah.git' },
+                { icon: Github, href: 'https://github.com/dindinn2460/dina-coding.git' },
                 { icon: Youtube, href: 'https://www.youtube.com/' },
               ].map((social, i) => (
                 <motion.a
