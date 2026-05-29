@@ -127,7 +127,7 @@ export default function SkillsSection() {
           </span>
 
           <h2 className="text-3xl md:text-5xl font-bold mt-2 text-zinc-900 dark:text-white">
-            Mapel Favorit & Performa 📚✨
+            Favourite Subjects 📚✨
           </h2>
 
           <div className="w-20 h-[2px] bg-fuchsia-500 mx-auto mt-3 rounded-full" />
