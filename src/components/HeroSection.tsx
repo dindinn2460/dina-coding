@@ -24,9 +24,11 @@ export default function HeroSection() {
     y.set(0);
   };
 
-  const scrollToAbout = () => {
-    const el = document.querySelector('#about');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  const scrollTo = (id: string) => {
+    const el = document.querySelector(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -35,22 +37,10 @@ export default function HeroSection() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden scroll-mt-24"
     >
 
-      {/* 🌸 BACKGROUND (SAMA DENGAN ABOUT) */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div
-          className="
-            absolute inset-0
-            bg-gradient-to-b
-            from-fuchsia-50
-            via-pink-50
-            to-rose-50
-            dark:from-zinc-950
-            dark:via-zinc-900
-            dark:to-zinc-950
-          "
-        />
+        <div className="absolute inset-0 bg-gradient-to-b from-fuchsia-50 via-pink-50 to-rose-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950" />
 
-        {/* glow fuchsia + pink biar match */}
         <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-fuchsia-400/20 blur-[120px] rounded-full animate-pulse" />
         <div className="absolute bottom-[-120px] right-[-100px] w-[350px] h-[350px] bg-pink-400/20 blur-[120px] rounded-full animate-pulse" />
       </div>
@@ -60,13 +50,11 @@ export default function HeroSection() {
       <div className="container mx-auto px-6 relative z-10 flex justify-center">
         <div className="flex flex-col md:flex-row items-center gap-10 max-w-5xl">
 
-          {/* 🧑 FOTO */}
+          {/* FOTO */}
           <motion.div
             style={{ rotateX, rotateY }}
             onMouseMove={handleMouseMove}
             onMouseLeave={reset}
-            onHoverStart={() => setIsHover(true)}
-            onHoverEnd={() => setIsHover(false)}
             className="relative"
           >
             <div className="absolute inset-0 blur-3xl bg-fuchsia-500/30 opacity-40 rounded-2xl" />
@@ -80,17 +68,13 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* ✨ TEXT */}
+          {/* TEXT */}
           <div className="text-center md:text-left max-w-lg">
 
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="
-                inline-block px-4 py-2 rounded-full mb-5
-                bg-fuchsia-500/10 text-fuchsia-500 dark:text-fuchsia-300
-                border border-fuchsia-300/20
-              "
+              className="inline-block px-4 py-2 rounded-full mb-5 bg-fuchsia-500/10 text-fuchsia-500 dark:text-fuchsia-300 border border-fuchsia-300/20"
             >
               👋 Welcome 🌸
             </motion.span>
@@ -111,22 +95,26 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              Aku masih pelajar yang lagi belajar ngoding 💻✨  
+              Aku masih pelajar yang lagi belajar ngoding 💻✨
               khususnya <span className="text-fuchsia-500">web development</span> 🚀
             </motion.p>
 
-            {/* BUTTON */}
+            {/* BUTTON FIX */}
             <div className="flex gap-4 flex-wrap justify-center md:justify-start">
 
-              <Button className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white px-8 rounded-full">
-                Projects 🚀
+              <Button
+                onClick={() => scrollTo('#projects')}
+                className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white px-8 rounded-full"
+              >
+                Movies 🚀
               </Button>
 
               <Button
+                onClick={() => scrollTo('#contact')}
                 variant="outline"
                 className="border-fuchsia-400 text-fuchsia-500 dark:text-fuchsia-300 rounded-full px-8"
               >
-                Contact 💌
+                Call Me 💌
               </Button>
 
             </div>
@@ -142,14 +130,7 @@ export default function HeroSection() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="
-                    p-3 rounded-full
-                    bg-white/5 backdrop-blur-md
-                    border border-white/10
-                    hover:border-fuchsia-400
-                    hover:shadow-[0_0_20px_rgba(217,70,239,0.4)]
-                    transition
-                  "
+                  className="p-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:border-fuchsia-400 hover:shadow-[0_0_20px_rgba(217,70,239,0.4)] transition"
                   whileHover={{ scale: 1.15, y: -3 }}
                 >
                   <social.icon className="h-5 w-5 text-black dark:text-white" />
@@ -161,9 +142,9 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* ⬇️ SCROLL */}
+      {/* SCROLL */}
       <button
-        onClick={scrollToAbout}
+        onClick={() => scrollTo('#about')}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <ArrowDown className="text-fuchsia-500" />
