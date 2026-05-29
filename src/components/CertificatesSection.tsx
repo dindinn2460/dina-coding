@@ -4,125 +4,168 @@ import { Button } from '@/components/ui/button';
 
 const certificates = [
   {
-    title: 'AWS Certified Solutions Architect',
-    issuer: 'Amazon Web Services',
+    title: '📚 Partisipasi Kegiatan Literasi Sekolah',
+    issuer: 'Sekolah / Perpustakaan',
+    date: '2025',
+    credentialId: 'SCH-LIT-001',
+    image: '📚',
+    color: 'from-fuchsia-500 via-pink-500 to-rose-500',
+    link: '#',
+  },
+  {
+    title: '🎤 Kegiatan Presentasi Kelas',
+    issuer: 'Mapel Bahasa Indonesia',
+    date: '2025',
+    credentialId: 'SCH-PRES-002',
+    image: '🎤',
+    color: 'from-pink-400 via-rose-400 to-fuchsia-400',
+    link: '#',
+  },
+  {
+    title: '🌍 Tugas Proyek Geografi',
+    issuer: 'Mapel Geografi',
     date: '2024',
-    credentialId: 'AWS-SAA-123456',
-    image: '🏆',
-    color: 'from-orange-500/20 to-yellow-500/20',
+    credentialId: 'SCH-GEO-003',
+    image: '🌍',
+    color: 'from-rose-400 via-pink-400 to-fuchsia-500',
     link: '#',
   },
   {
-    title: 'Google Professional Cloud Developer',
-    issuer: 'Google Cloud',
+    title: '🎨 Kegiatan Seni & Kreativitas Sekolah',
+    issuer: 'Ekstrakurikuler Seni',
+    date: '2024',
+    credentialId: 'SCH-ART-004',
+    image: '🎨',
+    color: 'from-fuchsia-400 via-pink-400 to-rose-400',
+    link: '#',
+  },
+  {
+    title: '🏃 Kegiatan Olahraga & Kebugaran',
+    issuer: 'PJOK Sekolah',
+    date: '2024',
+    credentialId: 'SCH-SPORT-005',
+    image: '🏃',
+    color: 'from-pink-500 via-rose-500 to-fuchsia-500',
+    link: '#',
+  },
+  {
+    title: '🤝 Kegiatan Gotong Royong Sekolah',
+    issuer: 'Lingkungan Sekolah',
     date: '2023',
-    credentialId: 'GCP-PCD-789012',
-    image: '☁️',
-    color: 'from-blue-500/20 to-cyan-500/20',
-    link: '#',
-  },
-  {
-    title: 'Meta Front-End Developer',
-    issuer: 'Meta (Coursera)',
-    date: '2023',
-    credentialId: 'META-FE-345678',
-    image: '⚛️',
-    color: 'from-blue-600/20 to-indigo-500/20',
-    link: '#',
-  },
-  {
-    title: 'MongoDB Certified Developer',
-    issuer: 'MongoDB University',
-    date: '2023',
-    credentialId: 'MDB-DEV-901234',
-    image: '🍃',
-    color: 'from-green-500/20 to-emerald-500/20',
-    link: '#',
-  },
-  {
-    title: 'Certified Kubernetes Administrator',
-    issuer: 'CNCF',
-    date: '2022',
-    credentialId: 'CKA-567890',
-    image: '⚙️',
-    color: 'from-indigo-500/20 to-purple-500/20',
-    link: '#',
-  },
-  {
-    title: 'Professional Scrum Master I',
-    issuer: 'Scrum.org',
-    date: '2022',
-    credentialId: 'PSM-I-234567',
-    image: '📋',
-    color: 'from-teal-500/20 to-cyan-500/20',
+    credentialId: 'SCH-SOCIAL-006',
+    image: '🤝',
+    color: 'from-rose-300 via-pink-300 to-fuchsia-300',
     link: '#',
   },
 ];
 
 export default function CertificatesSection() {
   return (
-    <section id="certificates" className="py-20 md:py-32">
+    <section
+      id="certificates"
+      className="
+        py-20 md:py-32
+        bg-gradient-to-b
+        from-fuchsia-50 via-pink-50 to-rose-50
+        dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950
+      "
+    >
       <div className="container mx-auto px-4">
+
+        {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-14"
         >
-          <span className="text-primary font-medium mb-2 block">Kredensial</span>
-          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-            Sertifikat &amp; Lisensi
+          <span className="text-fuchsia-500 font-medium">
+            🎓 Aktivitas Sekolah
+          </span>
+
+          <h2 className="text-3xl md:text-5xl font-bold mt-2">
+            <span className="bg-gradient-to-r from-fuchsia-500 via-pink-500 to-rose-500 bg-clip-text text-transparent">
+              Pengalaman & Kegiatan
+            </span>{' '}
+            ✨
           </h2>
-          <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
+
+          <div className="w-24 h-1 bg-gradient-to-r from-fuchsia-500 via-pink-500 to-rose-500 mx-auto mt-3 rounded-full" />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        {/* GRID */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+
           {certificates.map((cert, index) => (
             <motion.div
               key={cert.title}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group"
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              whileHover={{ y: -5 }}
+              className="
+                group relative p-6 rounded-2xl
+                bg-white/70 dark:bg-zinc-900/40
+                backdrop-blur-xl
+                border border-pink-200/40 dark:border-zinc-700
+                shadow-sm hover:shadow-lg
+                transition
+              "
             >
-              <div className="h-full p-6 glass rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2">
-                <div className={`w-16 h-16 rounded-xl mb-4 flex items-center justify-center bg-gradient-to-br ${cert.color}`}>
-                  <span className="text-3xl">{cert.image}</span>
-                </div>
-                
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2">
-                    <Award className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                    <h3 className="font-display text-lg font-bold group-hover:text-primary transition-colors">
-                      {cert.title}
-                    </h3>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground">
-                    {cert.issuer}
-                  </p>
-                  
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    <span>{cert.date}</span>
-                  </div>
-                  
-                  <p className="text-xs text-muted-foreground/70 font-mono">
-                    ID: {cert.credentialId}
-                  </p>
-                  
-                  <Button variant="outline" size="sm" className="rounded-full mt-2" asChild>
-                    <a href={cert.link} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="h-4 w-4 mr-1" />
-                      Verifikasi
-                    </a>
-                  </Button>
-                </div>
+              {/* glow */}
+              <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${cert.color} opacity-0 group-hover:opacity-20 blur-2xl transition`} />
+
+              {/* ICON */}
+              <div className={`w-14 h-14 rounded-xl mb-4 flex items-center justify-center bg-gradient-to-br ${cert.color}`}>
+                <span className="text-2xl">{cert.image}</span>
               </div>
+
+              {/* TITLE */}
+              <div className="flex items-start gap-2">
+                <Award className="h-5 w-5 text-fuchsia-500 mt-1" />
+                <h3 className="font-semibold text-zinc-900 dark:text-white group-hover:text-fuchsia-500 transition">
+                  {cert.title}
+                </h3>
+              </div>
+
+              {/* ISSUER */}
+              <p className="text-sm text-zinc-600 dark:text-zinc-300 mt-2">
+                {cert.issuer}
+              </p>
+
+              {/* DATE */}
+              <div className="flex items-center gap-2 text-xs text-zinc-500 mt-2">
+                <Calendar className="h-4 w-4" />
+                <span>{cert.date}</span>
+              </div>
+
+              {/* ID */}
+              <p className="text-[11px] font-mono text-zinc-400 mt-2">
+                ID: {cert.credentialId}
+              </p>
+
+              {/* BUTTON */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="
+                  mt-4 rounded-full
+                  border-fuchsia-300 text-fuchsia-500
+                  hover:bg-fuchsia-500 hover:text-white
+                  transition
+                "
+                asChild
+              >
+                <a href={cert.link}>
+                  <ExternalLink className="h-4 w-4 mr-1" />
+                  Lihat Detail
+                </a>
+              </Button>
+
             </motion.div>
           ))}
+
         </div>
       </div>
     </section>
